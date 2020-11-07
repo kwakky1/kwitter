@@ -9,6 +9,7 @@ const Profile = ({refreshUser, userObj}) => {
     const onLogOutClink = () => {
         authService.signOut();
         history.push("/");
+        refreshUser();
     }
 
     const getMyKweets = async () => {
