@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {authService, dbService} from "../fbase";
+import React, {useState} from 'react';
+import {authService} from "../fbase";
 import {useHistory} from "react-router-dom"
 
 const Profile = ({refreshUser, userObj}) => {
@@ -12,14 +12,16 @@ const Profile = ({refreshUser, userObj}) => {
         refreshUser();
     }
 
-    const getMyKweets = async () => {
+    // firebase 데이터베이스 접근방법
+
+    /*const getMyKweets = async () => {
         const kweets = await dbService
             .collection("kweets")
             .where("creatorId", "==", userObj.uid)
             .orderBy("createdAt", "desc")
             .get();
         console.log(kweets.docs.map((doc)=> doc.data()));
-    }
+    }*/
     const onChange = (e) => {
         const {target: {value}} = e;
         setNewDisplayName(value);
@@ -34,11 +36,6 @@ const Profile = ({refreshUser, userObj}) => {
             refreshUser();
         }
     }
-
-    useEffect(() => {
-        getMyKweets();
-    },[]);
-
     return (
         <div className={"container"}>
             <form onSubmit={onsubmit} className={"profileForm"}>

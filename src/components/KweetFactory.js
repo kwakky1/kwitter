@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {dbService, storageService} from "../fbase";
 import {v4 as uuidv4} from "uuid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,14 +8,20 @@ const KweetFactory = ( {userObj} ) => {
     const [kweet, setKweet] = useState("");
     const [image, setImage] = useState("")
 
+   /* useEffect(()=>{
+        return () => setImage("");
+    }, [])*/
+
     const onSubmit = async (e) =>{
+        e.preventDefault();
         if(kweet === ""){
             return;
         }
-        e.preventDefault();
         let imageUrl = "";
         if(image !== "") {
-            const fileRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+            const fileRef = storageService
+                .ref()
+                .child(`${userObj.uid}/${uuidv4()}`);
             const response = await fileRef.putString(image, "data_url");
             imageUrl = await response.ref.getDownloadURL()
         }
@@ -31,22 +37,24 @@ const KweetFactory = ( {userObj} ) => {
     }
     const onChange = (e) => {
         const {
-            target : {value},
+            target : { value },
         } = e;
         setKweet(value);
     }
     const onFileChange = (e) => {
         const {
-            target : {files},
+            target : { files },
         } = e;
         const theFile = files[0];
         const reader = new FileReader();
-        reader.readAsDataURL(theFile);
         reader.onloadend = (finishedEvent) =>{
             const {currentTarget : { result }} = finishedEvent;
             setImage(result);
+        };
+        if (Boolean(theFile)) {
+            reader.readAsDataURL(theFile);
         }
-    }
+    };
     const onClearPhotoClick = () => {
         setImage("");
     }
@@ -55,16 +63,16 @@ const KweetFactory = ( {userObj} ) => {
         <form onSubmit={onSubmit} className={"factoryForm"}>
             <div className={"factoryInput__container"}>
                 <input
-                    className={"factory__Input"}
+                    className={"factoryInput__input"}
                     value={kweet}
                     type="text"
                     placeholder={"What's on your mind?"}
                     maxLength={120}
                     onChange={onChange}
                 />
-                <input type="submit" value={"&rarr;"} className={"factoryInput__arrow"}/>
+                <input type="submit" value="&rarr;" className={"factoryInput__arrow"}/>
             </div>
-            <label for={"image-file"} className={"factoryInput__label"}>
+            <label htmlFor={"image-file"} className={"factoryInput__label"}>
                 <span>Add Photos</span>
                 <FontAwesomeIcon icon={faPlus}/>
             </label>

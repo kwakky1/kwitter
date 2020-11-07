@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import AppRouter from "components/AppRouter";
 import {authService} from "fbase";
+import "styles.css"
 
 const App = () => {
     const [init, setInit] = useState(false);
@@ -39,7 +40,7 @@ const App = () => {
                     userObj={userObj}
                 />
                 : "Initializing..."}
-          <footer>&copy; {new Date().getFullYear()} Kwitter</footer>
+          <footer className={"footer"}>&copy; {new Date().getFullYear()} Kwitter</footer>
         </>
     );
 }

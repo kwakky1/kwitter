@@ -30,7 +30,7 @@ const Auth = () => {
                 style={{marginBottom: 30}}
             />
             <AuthForm/>
-            <div color={"authBtns"}>
+            <div className={"authBtns"}>
                 <button onClick={onSocialClick} name={"google"} className={"authBtn"}>
                     구글 아이디로 로그인 <FontAwesomeIcon icon={faGoogle}/>
                 </button>
