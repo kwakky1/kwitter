@@ -8,7 +8,10 @@ const Home = ({userObj}) => {
     const [kweets, setKweets] = useState([]);
 
     useEffect(() => {
-        dbService.collection("kweets").onSnapshot(snapshot =>{
+        dbService
+            .collection("kweets")
+            .orderBy("createdAt", "desc")
+            .onSnapshot(snapshot =>{
             const kweetArray = snapshot.docs.map(doc => (
                 {id: doc.id,
                 ...doc.data()
