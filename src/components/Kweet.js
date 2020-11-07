@@ -1,19 +1,23 @@
 import React, {useState} from 'react';
-import {dbService} from "../fbase";
+import {dbService, storageService} from "../fbase";
 
 const Kweet = ({ kweetObj, isOwner }) => {
     const [editing, setEditing] = useState(false);
     const [newKweet, setNewKweet] = useState(kweetObj.text);
 
-    const onDeleteClick = () => {
+    const onDeleteClick = async () => {
         const ok = window.confirm("이 트윗을 지우길 원하십니까?")
         if(ok){
-            dbService.doc(`kweets/${kweetObj.id}`).delete();
+            await dbService.doc(`kweets/${kweetObj.id}`).delete();
+            if(kweetObj.imageUrl !== "") {
+                await storageService.refFromURL(kweetObj.imageUrl).delete();
+            }
         }
     }
 
     const toggleEditing = () => {
         setEditing((prev)=> !prev);
+        setNewKweet("");
     }
 
     const onSubmit = async (e) => {
@@ -55,6 +59,7 @@ const Kweet = ({ kweetObj, isOwner }) => {
             ) : (
                 <>
                     <h4>{kweetObj.text}</h4>
+                    {kweetObj.imageUrl && <img src={kweetObj.imageUrl} alt="profile" width={"50px"} height={"50px"}/>}
                     {isOwner && (
                         <>
                             <button onClick={onDeleteClick}>지우기</button>
