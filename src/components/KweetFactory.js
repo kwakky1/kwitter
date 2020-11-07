@@ -1,12 +1,17 @@
 import React, {useState} from 'react';
 import {dbService, storageService} from "../fbase";
 import {v4 as uuidv4} from "uuid";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const KweetFactory = ( {userObj} ) => {
     const [kweet, setKweet] = useState("");
     const [image, setImage] = useState("")
 
     const onSubmit = async (e) =>{
+        if(kweet === ""){
+            return;
+        }
         e.preventDefault();
         let imageUrl = "";
         if(image !== "") {
@@ -43,26 +48,51 @@ const KweetFactory = ( {userObj} ) => {
         }
     }
     const onClearPhotoClick = () => {
-        setImage(null);
+        setImage("");
     }
 
     return (
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className={"factoryForm"}>
+            <div className={"factoryInput__container"}>
+                <input
+                    className={"factory__Input"}
+                    value={kweet}
+                    type="text"
+                    placeholder={"What's on your mind?"}
+                    maxLength={120}
+                    onChange={onChange}
+                />
+                <input type="submit" value={"&rarr;"} className={"factoryInput__arrow"}/>
+            </div>
+            <label for={"image-file"} className={"factoryInput__label"}>
+                <span>Add Photos</span>
+                <FontAwesomeIcon icon={faPlus}/>
+            </label>
             <input
-                value={kweet}
-                type="text"
-                placeholder={"What's on your mind?"}
-                maxLength={120}
-                onChange={onChange}
+                id={"image-file"}
+                type="file"
+                accept={"image/*"}
+                onChange={onFileChange}
+                style={{
+                    opacity: 0,
+                }}
             />
-            <input type="file" accept={"image/*"} onChange={onFileChange}/>
-            <input type="submit" value={"Kweet"} />
             {image && (
-                <div>
-                    <img src={image} alt="img" width={"50px"} height={"50px"}/>
-                    <button onClick={onClearPhotoClick}>취소</button>
+                <div className={"factoryForm__image"}>
+                    <img
+                        src={image}
+                        alt="img"
+                        style={{
+                            backgroundImage: image
+                        }}
+                    />
+                    <div className={"factoryForm__clear"} onClick={onClearPhotoClick}>
+                        <span>지우기</span>
+                        <FontAwesomeIcon icon={faTimes}/>
+                    </div>
                 </div>
             )}
+
         </form>
     );
 };

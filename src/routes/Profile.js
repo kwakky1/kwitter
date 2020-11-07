@@ -40,18 +40,29 @@ const Profile = ({refreshUser, userObj}) => {
     },[]);
 
     return (
-        <>
-            <form onSubmit={onsubmit}>
+        <div className={"container"}>
+            <form onSubmit={onsubmit} className={"profileForm"}>
                 <input
                     onChange={onChange}
                     type="text"
+                    autoFocus
                     placeholder={"Display Name"}
                     value={newDisplayName}
+                    className={"formInput"}
                 />
-                <input type="submit" value={"Update Profile"}/>
+                <input
+                    type="submit"
+                    value={"Update Profile"}
+                    className={"formBtn"}
+                    style={{
+                        marginTop: 10,
+                    }}
+                />
             </form>
-            <button onClick={onLogOutClink}>Log Out</button>
-        </>
+            <span className={"formBtn cancelBtn logOut"} onClick={onLogOutClink}>
+                로그아웃
+            </span>
+        </div>
     );
 };
 

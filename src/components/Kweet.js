@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 import {dbService, storageService} from "../fbase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Kweet = ({ kweetObj, isOwner }) => {
     const [editing, setEditing] = useState(false);
@@ -37,21 +39,26 @@ const Kweet = ({ kweetObj, isOwner }) => {
 
 
     return (
-        <div>
+        <div className={"kweet"}>
             {editing ? (
                 <>
                     {isOwner && (
                         <>
-                            <form onSubmit={onSubmit}>
+                            <form onSubmit={onSubmit} className={"container kweetEdit"}>
                                 <input type={"text"}
                                        placeholder={"수정하기"}
                                        value={newKweet}
                                        required
+                                       autoFocus
                                        onChange={onChange}
+                                       className={"formInput"}
                                 />
-                                <input type="submit" value={"트윗 수정"}/>
+                                <input type="submit" value={"트윗 수정"} className={"formBtn"}/>
                             </form>
-                            <button onClick={toggleEditing}>취소</button>
+
+                            <button onClick={toggleEditing} className={"formBtn cancelBtn"}>
+                                취소
+                            </button>
                         </>)
                     }
                 </>
@@ -59,12 +66,17 @@ const Kweet = ({ kweetObj, isOwner }) => {
             ) : (
                 <>
                     <h4>{kweetObj.text}</h4>
-                    {kweetObj.imageUrl && <img src={kweetObj.imageUrl} alt="profile" width={"50px"} height={"50px"}/>}
+                    {kweetObj.imageUrl && <img src={kweetObj.imageUrl} alt="profile"/>}
+
                     {isOwner && (
-                        <>
-                            <button onClick={onDeleteClick}>지우기</button>
-                            <button onClick={toggleEditing}>수정하기</button>
-                        </>
+                        <div className={"kweet__actions"}>
+                            <span onClick={onDeleteClick}>
+                                <FontAwesomeIcon icon={faTrash}/>
+                            </span>
+                            <span onClick={toggleEditing}>
+                                <FontAwesomeIcon icon={faPencilAlt}/>
+                            </span>
+                        </div>
                     )}
                 </>)
             }
